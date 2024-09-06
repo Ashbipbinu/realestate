@@ -20,9 +20,15 @@ const Header = () => {
           <FaSearch className="text-slate-600" />
         </form>
         <div className="flex justify-center items-center gap-3 font-[500]">
-        <ul className="hover:underline sm:hidden lg:block">Home</ul>
-        <ul className="hover:underline sm:hidden lg:block">About</ul>
-        <ul className="hover:underline">SignIn</ul>
+          <Link to="/">
+            <ul className="hover:underline sm:hidden lg:block">Home</ul>
+          </Link>
+          <Link to="/about">
+            <ul className="hover:underline sm:hidden lg:block">About</ul>
+          </Link>
+          <Link to="/signin">
+            <ul className="hover:underline">SignIn</ul>
+          </Link>
         </div>
       </div>
     </header>
