@@ -19,6 +19,7 @@ function App() {
         <Route path='/' element={<Home/>}/>
         <Route path= '/profile' element={<Profile/>}/>
         <Route path= '/about' element={<About/>}/>
+        {/* search bar should only be seen once the user is authenticated */}
         <Route path= '/signin' element={<Signin/>}/>
         <Route path= '/signup' element={<Signup/>}/>
       </Routes>
