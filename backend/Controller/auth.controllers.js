@@ -46,18 +46,19 @@ export const login = async (req, res, next) =>{
   const { email, password } = req.body;
   try {
     const emailMatchingProfile = await User.findOne({email});
-    const isPasswordMatching = await bcrypt.compare(password, emailMatchingProfile.password)
     if(!emailMatchingProfile){
       return next(errorHandler(401, "Incorrect email"))
     }
-
+    
+    const isPasswordMatching = await bcrypt.compare(password, emailMatchingProfile.password)
     if(!isPasswordMatching){
       return next(errorHandler(401, "Incorrect password"))
     }
 
     if(emailMatchingProfile && isPasswordMatching){
-      const { password:pass, ...rest} = emailMatchingProfile._doc
       const token = jwt.sign({ _id: emailMatchingProfile._id}, process.env.JWT_SECRET);
+      const { password:pass, ...rest} = emailMatchingProfile._doc
+
       return res.cookie("access_token", token, {httpOnly: true, maxAge: 10 * 24 * 60 * 60}).status(200).json(rest)
     }
   } catch (error) {

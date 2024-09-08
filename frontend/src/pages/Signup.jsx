@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Signup = () => {
+
+  const navigate = useNavigate()
 
   const  [formData, setFormData] = useState({});
   const [error, setError] = useState(false);
@@ -38,6 +40,7 @@ const Signup = () => {
         return
       }
       setIsLoading(false)
+      navigate("/signin")
      } catch (error) {
        console.log("error", error)
      }
@@ -57,7 +60,7 @@ const Signup = () => {
         </button>
       </form>
       <div>
-        <p>Have an accound?<Link to='/signin'><span className='text-blue-500 cursor-pointer'> Login in</span></Link></p>
+        <p>Have an account?<Link to='/signin'><span className='text-blue-500 cursor-pointer'> Login in</span></Link></p>
       </div>
       {error && <p className='text-red-500'>{error}</p>}
     </div>
