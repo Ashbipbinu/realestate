@@ -4,7 +4,7 @@ import { errorHandler } from '../utils/error.handler.js';
 import jwt from 'jsonwebtoken'
 
 export const signUp = async (req, res, next) => {
-  console.log("hit")
+  
   try {
     const { username, email, password } = req.body;
 
@@ -60,6 +60,36 @@ export const login = async (req, res, next) =>{
       const { password:pass, ...rest} = emailMatchingProfile._doc
 
       return res.cookie("access_token", token, {httpOnly: true, maxAge: 10 * 24 * 60 * 60}).status(200).json(rest)
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const googleAuth = async (req, res, next) => {
+
+  try {
+    const user = await User.findOne({email : req.body.email});
+
+    if(user){
+      const token = jwt.sign({_id:user.password}, process.env.JWT_SECRET);
+      const {password, ...rest} = user._doc
+      res.cookie("access_token", token, { httpOnly: true}).status(200).json(rest)
+    }else{
+      const generatedPassword = Math.random().toString(36).slice(-8);
+      const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
+
+      const newUser = new User({
+         username: req.body.name.split(" ").join('') + Math.random().toString(36).slice(-4),
+         password: hashedPassword,
+         email: req.body.email,
+         avatar: req.body.photo
+      })
+
+      await newUser.save();
+      const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
+      newUser.password = null 
+      return res.cookie("access_token", token, {httpOnly:true}).status(200).json(newUser) 
     }
   } catch (error) {
     next(error)

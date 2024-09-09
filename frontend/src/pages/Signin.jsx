@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { signInStart, signInSuccess, signInFailure } from '../../redux/Slices/userSlide';
 import { useDispatch, useSelector } from 'react-redux'
+import OAuth from '../components/OAuth';
+
 
 const Signin = () => {
 
@@ -9,6 +11,7 @@ const Signin = () => {
 
   const dispatch = useDispatch();
   const {error, loading} = useSelector(state => state.user)
+  console.log("error", error)
 
   const  [formData, setFormData] = useState({});
 
@@ -28,7 +31,7 @@ const Signin = () => {
     event.preventDefault();
      try {
       dispatch(signInStart())
-      const res = await fetch('http://localhost:3000/api/auth/signin', 
+      const res = await fetch("/api/auth/signin", 
         {
         method: "POST",
         headers: {
@@ -61,11 +64,12 @@ const Signin = () => {
         <button onClick={handleSubmit} className='bg-slate-700 p-4  rounded-lg text-white font-semibold hover:bg-slate-500 uppercase'>
           {loading ? "Loading" : "Login"}
         </button>
+      <OAuth/>
       </form>
       <div>
         <p>Dont't have an account?<Link to='/signup'><span className='text-blue-500 cursor-pointer'> Sign up</span></Link></p>
       </div>
-      {error && <p className='text-red-500'>{error}</p>}
+      {/* {error && <p className='text-red-500'>{error}</p>} */}
     </div>
   )
 }

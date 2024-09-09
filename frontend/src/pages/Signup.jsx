@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
+import OAuth from '../components/OAuth';
+
 
 const Signup = () => {
 
@@ -24,7 +26,7 @@ const Signup = () => {
     event.preventDefault();
      try {
       setIsLoading(true)
-      const res = await fetch('http://localhost:3000/api/auth/signup', 
+      const res = await fetch('/api/auth/signup', 
         {
         method: "POST",
         headers: {
@@ -58,11 +60,12 @@ const Signup = () => {
         <button onClick={handleSubmit} className='bg-slate-700 p-4  rounded-lg text-white font-semibold hover:bg-slate-500 uppercase'>
           {isLoading ? "Loading" : "Sign up"}
         </button>
+        <OAuth/>
       </form>
       <div>
         <p>Have an account?<Link to='/signin'><span className='text-blue-500 cursor-pointer'> Login in</span></Link></p>
       </div>
-      {error && <p className='text-red-500'>{error}</p>}
+      {/* {error && <p className='text-red-500'>{error}</p>} */}
     </div>
   )
 }
