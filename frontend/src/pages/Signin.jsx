@@ -44,12 +44,19 @@ const Signin = () => {
       console.log(data)
       if(data.success === false){
         dispatch(signInFailure(data.error))
+       await setTimeout(() => {
+          console.log("entered")
+          dispatch(signInFailure(null))
+         }, 1000)
         return
       }
       dispatch(signInSuccess(data))
       navigate('/')
      } catch (error) {
        dispatch(signInFailure(error))
+       await setTimeout(() => {
+        dispatch(signInFailure(null))
+       }, 1000)
      }
   }
 
@@ -69,7 +76,7 @@ const Signin = () => {
       <div>
         <p>Dont't have an account?<Link to='/signup'><span className='text-blue-500 cursor-pointer'> Sign up</span></Link></p>
       </div>
-      {/* {error && <p className='text-red-500'>{error}</p>} */}
+      {error && <p className='text-red-500'>{error}</p>}
     </div>
   )
 }

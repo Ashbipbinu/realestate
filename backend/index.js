@@ -2,16 +2,20 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from 'cors';
+import cookieParser from "cookie-parser";
 
-import authRoute from './Routes/auth.routes.js'
+import authRoute from './Routes/auth.routes.js';
+import userRoute from './Routes/user.routes.js'
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser())
 app.use(cors())
 
 app.use('/api/auth', authRoute)
+app.use('/api/user', userRoute)
 
 app.use((err, req, res, next) => {
     const status = err.status || 500;
