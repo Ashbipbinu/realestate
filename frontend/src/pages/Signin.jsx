@@ -11,7 +11,6 @@ const Signin = () => {
 
   const dispatch = useDispatch();
   const {error, loading} = useSelector(state => state.user)
-  console.log("error", error)
 
   const  [formData, setFormData] = useState({});
 
@@ -47,7 +46,7 @@ const Signin = () => {
        await setTimeout(() => {
           console.log("entered")
           dispatch(signInFailure(null))
-         }, 1000)
+         }, 3000)
         return
       }
       dispatch(signInSuccess(data))
@@ -56,7 +55,7 @@ const Signin = () => {
        dispatch(signInFailure(error))
        await setTimeout(() => {
         dispatch(signInFailure(null))
-       }, 1000)
+       }, 3000)
      }
   }
 
@@ -65,10 +64,10 @@ const Signin = () => {
       <h1 className="text-center text-3xl my-3 font-semibold">
         Sign In
       </h1>
-      <form className='flex flex-col gap-4' onChange={handleChange}>
+      <form className='flex flex-col gap-4' onChange={handleChange} onSubmit={handleSubmit}>
         <input autoComplete='off' type="email" placeholder="Email" name="email" className='border p-3 rounded-lg'/>
         <input autoComplete='off' type="password" placeholder="Password" name="password" className='border p-3 rounded-lg'/>
-        <button onClick={handleSubmit} className='bg-slate-700 p-4  rounded-lg text-white font-semibold hover:bg-slate-500 uppercase'>
+        <button className='bg-slate-700 p-4  rounded-lg text-white font-semibold hover:bg-slate-500 uppercase'>
           {loading ? "Loading" : "Login"}
         </button>
       <OAuth/>

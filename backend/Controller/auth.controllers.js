@@ -80,7 +80,6 @@ export const googleAuth = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (user) {
-      console.log("user", user)
       const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
       const { password, ...rest } = user._doc;
       res
@@ -88,7 +87,7 @@ export const googleAuth = async (req, res, next) => {
         .status(200)
         .json(rest);
     } else {
-      console.log("enter")
+     
       const generatedPassword = Math.random().toString(36).slice(-8);
       const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
 
@@ -113,3 +112,12 @@ export const googleAuth = async (req, res, next) => {
     next(error);
   }
 };
+
+export const logOut = async(req, res, next) => {
+  try {
+    res.clearCookie('access_token')
+    res.status(200).json({message: "User logged out successfully"})
+  } catch (error) {
+    next(error)
+  }
+}

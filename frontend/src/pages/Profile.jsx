@@ -9,6 +9,9 @@ import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signOutUserFailure,
+  signOutUserStart,
+  signOutUserSuccess,
 } from "../../redux/Slices/userSlide";
 
 import {
@@ -51,7 +54,6 @@ const Profile = () => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFilePercent(Math.round(progress));
-        console.log(progress);
       },
       (error) => {
         setFileUploadedErr(true);
@@ -122,6 +124,17 @@ const Profile = () => {
     }
   };
 
+  const handleSignOut = async() => {
+      try {
+        dispatch(signOutUserStart())
+        await fetch('/api/auth/signout')
+        dispatch(signOutUserSuccess())
+        navigate('/signin')
+      } catch (error) {
+        dispatch(signOutUserFailure(error))
+      }
+  }
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="font-semibold text-3xl text-center my-5">Profile</h1>
@@ -174,9 +187,9 @@ const Profile = () => {
           defaultValue={currentUser.email}
         />
         <input
-          type="passowrd"
+          type="password"
           placeholder="Password"
-          id="passowrd"
+          id="password"
           className="border p-3 rounded-lg"
         />
         <button className="bg-slate-700 p-3 text-white uppercase font-semibold rounded-lg disabled:opacity-95">
@@ -187,7 +200,7 @@ const Profile = () => {
         <span onClick={handleDeleteUser} className="text-red-500 cursor-pointer p-2 rounded-lg font-semibold text-xl hover:bg-red-700 hover:text-white">
           Delete Account
         </span>
-        <span className="text-red-500 cursor-pointer p-2 rounded-lg font-semibold text-xl hover:bg-red-700 hover:text-white">
+        <span onClick={handleSignOut} className="text-red-500 cursor-pointer p-2 rounded-lg font-semibold text-xl hover:bg-red-700 hover:text-white">
           Sign Out
         </span>
       </div>

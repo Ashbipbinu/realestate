@@ -5,7 +5,8 @@ import cors from 'cors';
 import cookieParser from "cookie-parser";
 
 import authRoute from './Routes/auth.routes.js';
-import userRoute from './Routes/user.routes.js'
+import userRoute from './Routes/user.routes.js';
+import listingRoute from './Routes/listing.routes.js'
 
 dotenv.config();
 
@@ -14,8 +15,9 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(cors())
 
-app.use('/api/auth', authRoute)
-app.use('/api/user', userRoute)
+app.use('/api/auth', authRoute);
+app.use('/api/user', userRoute);
+app.use('/api/listing', listingRoute)
 
 app.use((err, req, res, next) => {
     const status = err.status || 500;

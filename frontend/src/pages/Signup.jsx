@@ -65,7 +65,7 @@ const Signup = () => {
       <div>
         <p>Have an account?<Link to='/signin'><span className='text-blue-500 cursor-pointer'> Login in</span></Link></p>
       </div>
-      {/* {error && <p className='text-red-500'>{error}</p>} */}
+      {error && <p className='text-red-500'>{error}</p>}
     </div>
   )
 }
