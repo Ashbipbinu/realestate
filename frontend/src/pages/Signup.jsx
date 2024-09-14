@@ -49,7 +49,7 @@ const Signup = () => {
   }
 
   return (
-    <div className='p-3 max-w-lg mx-auto '>
+    <div className='p-3 max-w-lg mx-auto my-24'>
       <h1 className="text-center text-3xl my-3 font-semibold">
         Sign Up
       </h1>

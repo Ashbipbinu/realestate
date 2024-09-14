@@ -43,6 +43,9 @@ export const login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const emailMatchingProfile = await User.findOne({ email });
+    if(!email && !password){
+      return next(errorHandler(401, "Please fill all the fields"));
+    }
     if (!emailMatchingProfile) {
       return next(errorHandler(401, "Incorrect email"));
     }
@@ -93,8 +96,8 @@ export const googleAuth = async (req, res, next) => {
 
       const newUser = new User({
         username:
-          req.body.name.split(" ").join("") +
-          Math.random().toString(36).slice(-4),
+          req.body.name.split(" ")[0] +
+          Math.floor(Math.random() * 10).toString().slice(-4),
         password: hashedPassword,
         email: req.body.email,
         avatar: req.body.photo,

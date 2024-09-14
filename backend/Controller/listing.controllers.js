@@ -6,6 +6,7 @@ export const createListing = async (req, res, next) => {
         const list = await Listing.create(req.body)
         res.status(201).json(list)
     } catch (error) {
+        console.log("enter")
         next(error)
      }
 }

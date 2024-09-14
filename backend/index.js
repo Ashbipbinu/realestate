@@ -20,6 +20,7 @@ app.use('/api/user', userRoute);
 app.use('/api/listing', listingRoute)
 
 app.use((err, req, res, next) => {
+    console.log("err", err)
     const status = err.status || 500;
     const error = err.message || "Internal Server Error";
     return res.status(status).json({
@@ -31,7 +32,7 @@ app.use((err, req, res, next) => {
 
 app.listen(3000, async() => {
     mongoose.connect(process.env.MONGO_URI).then(() =>{
-        console.log("Successfully connected to the databse")
+        console.log("Successfully connected to the database")
         console.log("Server lsitening to the PORT 3000");
     }).catch((err) => {
         console.log("Error while connecting to the database", err)

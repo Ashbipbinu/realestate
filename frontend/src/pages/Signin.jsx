@@ -44,7 +44,6 @@ const Signin = () => {
       if(data.success === false){
         dispatch(signInFailure(data.error))
        await setTimeout(() => {
-          console.log("entered")
           dispatch(signInFailure(null))
          }, 3000)
         return
@@ -60,7 +59,7 @@ const Signin = () => {
   }
 
   return (
-    <div className='p-3 max-w-lg mx-auto '>
+    <div className='p-3 max-w-lg mx-auto my-32'>
       <h1 className="text-center text-3xl my-3 font-semibold">
         Sign In
       </h1>

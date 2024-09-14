@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
+
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -18,12 +19,12 @@ import {
   getDownloadURL,
   getStorage,
   ref,
-  uploadBytesResumable,
+  uploadBytesResumable, 
 } from "firebase/storage";
 import { app } from "../firebase/firebase.config";
 
 const Profile = () => {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading } = useSelector((state) => state.user);
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);
   const [filePercent, setFilePercent] = useState(0);
@@ -136,11 +137,11 @@ const Profile = () => {
   }
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <div className="max-w-lg mx-auto p-4">
       <h1 className="font-semibold text-3xl text-center my-5">Profile</h1>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-2"
         onChange={handleFormChange}
       >
         <input
@@ -192,9 +193,12 @@ const Profile = () => {
           id="password"
           className="border p-3 rounded-lg"
         />
-        <button className="bg-slate-700 p-3 text-white uppercase font-semibold rounded-lg disabled:opacity-95">
+        <button disabled={loading} className="bg-slate-700 p-3 text-white uppercase font-semibold rounded-lg hover:opacity-90 disabled:opacity-95">
           Update
         </button>
+        <Link to='/create-list' className="bg-green-500 p-3 text-white rounded-lg text-center font-semibold uppercase hover:opacity-90">
+        Create Listing
+        </Link>
       </form>
       <div className="mt-2 flex justify-between">
         <span onClick={handleDeleteUser} className="text-red-500 cursor-pointer p-2 rounded-lg font-semibold text-xl hover:bg-red-700 hover:text-white">
