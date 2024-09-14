@@ -299,7 +299,6 @@ const CreateLisitng = () => {
                   type="number"
                   id="discountPrice"
                   className="p-2 w-full rounded-lg"
-                  min={50}
                   value={formData.discountedPrice}
                   required
                 />
@@ -382,7 +381,7 @@ const CreateLisitng = () => {
             <div className="flex justify-center flex-1">
               <button
                 onClick={handleSubmit}
-                className="w-full sm:w-2/3 disabled:bg-slate-200 hover:opacity-90 rounded-lg bg-green-400 p-3 text-white uppercase font-semibold"
+                className="w-full sm:w-2/3 disabled:bg-slate-200 hover:opacity-90 rounded-lg bg-slate-700 p-3 text-white uppercase font-semibold"
               >
                 {loading ? (
                   <BeatLoader
