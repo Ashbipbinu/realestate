@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateUserStart,
@@ -14,12 +13,13 @@ import {
   signOutUserStart,
   signOutUserSuccess,
 } from "../../redux/Slices/userSlide";
+import ErrorToast from "../components/Error";
 
 import {
   getDownloadURL,
   getStorage,
   ref,
-  uploadBytesResumable, 
+  uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase/firebase.config";
 
@@ -31,7 +31,10 @@ const Profile = () => {
   const [fileUploadedErr, setFileUploadedErr] = useState(false);
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [severity, setSeverity] = useState("");
+  const [userListings, setUserListings] = useState([]);
 
   useEffect(() => {
     if (file) {
@@ -125,16 +128,29 @@ const Profile = () => {
     }
   };
 
-  const handleSignOut = async() => {
-      try {
-        dispatch(signOutUserStart())
-        await fetch('/api/auth/signout')
-        dispatch(signOutUserSuccess())
-        navigate('/signin')
-      } catch (error) {
-        dispatch(signOutUserFailure(error))
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart());
+      await fetch("/api/auth/signout");
+      dispatch(signOutUserSuccess());
+      navigate("/signin");
+    } catch (error) {
+      dispatch(signOutUserFailure(error));
+    }
+  };
+
+  const handleShowAllListing = async () => {
+    try {
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        throw new Error("Something went wrong while fetching all the listings");
       }
-  }
+      setUserListings(data);
+    } catch (error) {
+      setError("Something went wrong while fetching all the listings");
+    }
+  };
 
   return (
     <div className="max-w-lg mx-auto p-4">
@@ -193,21 +209,75 @@ const Profile = () => {
           id="password"
           className="border p-3 rounded-lg"
         />
-        <button disabled={loading} className="bg-slate-700 p-3 text-white uppercase font-semibold rounded-lg hover:opacity-90 disabled:opacity-95">
+        <button
+          disabled={loading}
+          className="bg-slate-700 p-3 text-white uppercase font-semibold rounded-lg hover:opacity-90 disabled:opacity-95"
+        >
           Update
         </button>
-        <Link to='/create-list' className="bg-green-500 p-3 text-white rounded-lg text-center font-semibold uppercase hover:opacity-90">
-        Create Listing
+        <Link
+          to="/create-list"
+          className="bg-green-500 p-3 text-white rounded-lg text-center font-semibold uppercase hover:opacity-90"
+        >
+          Create Listing
         </Link>
       </form>
       <div className="mt-2 flex justify-between">
-        <span onClick={handleDeleteUser} className="text-red-500 cursor-pointer p-2 rounded-lg font-semibold text-xl hover:bg-red-700 hover:text-white">
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-500 cursor-pointer p-2 rounded-lg font-semibold text-xl hover:bg-red-700 hover:text-white"
+        >
           Delete Account
         </span>
-        <span onClick={handleSignOut} className="text-red-500 cursor-pointer p-2 rounded-lg font-semibold text-xl hover:bg-red-700 hover:text-white">
+        <span
+          onClick={handleSignOut}
+          className="text-red-500 cursor-pointer p-2 rounded-lg font-semibold text-xl hover:bg-red-700 hover:text-white"
+        >
           Sign Out
         </span>
       </div>
+      <button className="text-green-700 w-full" onClick={handleShowAllListing}>
+        Show all listings
+      </button>
+
+      {userListings && userListings.length > 0 && (
+        <div className="flex flex-col gap-3">
+          <h1 className="text-3xl mt-7 text-center">Your Listings</h1>
+          {userListings.map((list, index) => {
+            return (
+              <div
+                className="flex justify-between border rounded-lg p-3 items-center gap-3"
+                key={index}
+              >
+                <Link to={`/listing/${list._id}`}>
+                  <img
+                    src={list.imageUrls}
+                    alt="list image"
+                    className="h-20 w-20 object-contain"
+                  />
+                </Link>
+                <Link
+                  to={`/listing/${list._id}`}
+                  className="text-slate-700 font-semibold flex-1 hover:underline truncate"
+                >
+                  <p>{list.name}</p>
+                </Link>
+                <div className="flex flex-col">
+                  <button className="text-red-700 uppercase">Delete</button>
+                  <button className="text-green-700 uppercase">Edit</button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <ErrorToast
+        errorMessage={error}
+        setError={setError}
+        severity={severity === "" ? "error" : severity}
+        setSeverity={setSeverity}
+      />
     </div>
   );
 };
