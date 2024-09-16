@@ -14,6 +14,7 @@ import {
   signOutUserSuccess,
 } from "../../redux/Slices/userSlide";
 import ErrorToast from "../components/Error";
+import { RiPencilLine, RiDeleteBin6Line } from "react-icons/ri";
 
 import {
   getDownloadURL,
@@ -271,7 +272,7 @@ const Profile = () => {
           {userListings.map((list, index) => {
             return (
               <div
-                className="flex justify-between border rounded-lg p-3 items-center gap-3"
+                className="flex justify-between border-2 shadow-md rounded-lg p-3 items-center gap-3"
                 key={index}
               >
                 <Link to={`/listing/${list._id}`}>
@@ -287,14 +288,18 @@ const Profile = () => {
                 >
                   <p>{list.name}</p>
                 </Link>
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-4">
                   <button
                     onClick={() => handleDelete(list._id)}
                     className="text-red-700 uppercase"
                   >
-                    Delete
+                    <RiDeleteBin6Line />
                   </button>
-                  <button className="text-green-700 uppercase">Edit</button>
+                  <button className="text-yellow-700">
+                    <Link to={`/update-list/${list._id}`}>
+                      <RiPencilLine />
+                    </Link>
+                  </button>
                 </div>
               </div>
             );

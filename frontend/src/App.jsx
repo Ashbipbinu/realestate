@@ -4,9 +4,10 @@ import About from "./pages/About";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import PrivateRoute from "./components/PrivateRoute";
+import CreateLisitng from "./pages/CreateLisitng";
+import UpdateListing from "./pages/UpdateListing";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import CreateLisitng from "./pages/CreateLisitng";
 import Header from "./components/Header";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/create-list" element={<CreateLisitng />} />
+              <Route path="/update-list/:id" element={<UpdateListing />} />
             </Route>
           </Route>
           <Route path="/signin" element={<Signin />} />
