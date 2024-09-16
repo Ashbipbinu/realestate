@@ -48,6 +48,9 @@ export const getUserListings = async (req, res, next) => {
   try {
       if(req.params.id === req.user._id){
           const listings = await Listing.find({userRef : req.params.id})
+          if(!listings) {
+            return res.status(404, "No listings available")
+          }
           res.status(200).json(listings);
       }else{
         next(errorHandler(401, "You can only view your own listings."))

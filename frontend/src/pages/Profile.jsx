@@ -143,12 +143,37 @@ const Profile = () => {
     try {
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
       const data = await res.json();
+      if (!data) {
+        setError(data.error);
+        setSeverity("error");
+        return;
+      }
       if (data.success === false) {
-        throw new Error("Something went wrong while fetching all the listings");
+        throw new Error(data.error);
       }
       setUserListings(data);
     } catch (error) {
-      setError("Something went wrong while fetching all the listings");
+      setError(error.message);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        setError(`Something went wrong`);
+        setSeverity("error");
+        return;
+      }
+      setUserListings((prevEl) => prevEl.filter((list) => list._id !== id));
+      setError("Deleted the listing successfully");
+      setSeverity("success");
+    } catch (error) {
+      setError(`Something went wrong`);
+      setSeverity("error");
     }
   };
 
@@ -263,7 +288,12 @@ const Profile = () => {
                   <p>{list.name}</p>
                 </Link>
                 <div className="flex flex-col">
-                  <button className="text-red-700 uppercase">Delete</button>
+                  <button
+                    onClick={() => handleDelete(list._id)}
+                    className="text-red-700 uppercase"
+                  >
+                    Delete
+                  </button>
                   <button className="text-green-700 uppercase">Edit</button>
                 </div>
               </div>
