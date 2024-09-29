@@ -9,6 +9,7 @@ import UpdateListing from "./pages/UpdateListing";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
+import Listing from "./pages/Listing";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route element={<PrivateRoute />}>
             <Route element={<Header />}>
+              <Route path="/listing/:listingId" element={<Listing/>}/>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/profile" element={<Profile />} />

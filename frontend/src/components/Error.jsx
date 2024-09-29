@@ -3,17 +3,17 @@ import { useEffect, useRef } from 'react';
 
 const ErrorToast = ({ errorMessage, setError, severity, setSeverity }) => {
   const toast = useRef(null);
-  console.log("enter error")
   useEffect(() => {
     if (errorMessage) {
       toast.current.show({
         severity : severity,
-        summary: severity?.toUpperCase(),
+        summary: severity.toUpperCase(),
         detail: errorMessage,
         life: 3000,
       });
     }
     return () => {
+      console.log("entered return")
       setError("")
       setSeverity("") 
     }

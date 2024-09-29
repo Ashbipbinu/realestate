@@ -51,6 +51,7 @@ export const updateListing = async (req, res, next) => {
 }
 
 export const getListById = async (req, res, next) => {
+  console.log("hit")
   try {
     const list = await Listing.findById(req.params.id)
     if(list.userRef !== req.user._id){
