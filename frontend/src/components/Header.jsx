@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Link, Outlet } from "react-router-dom";
 import { useSelector} from'react-redux'
 
 const Header = () => {
 
-  const { currentUser } = useSelector(state => state.user)
+  const { currentUser } = useSelector(state => state.user);
+  const [searchTerm, setSearchTerm] = useState("")
 
   return (
     <>
