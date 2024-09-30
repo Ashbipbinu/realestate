@@ -10,6 +10,7 @@ import UpdateListing from "./pages/UpdateListing";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Listing from "./pages/Listing";
+import Search from "./pages/Search";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/create-list" element={<CreateLisitng />} />
               <Route path="/update-list/:id" element={<UpdateListing />} />
+              <Route path="/search" element={<Search/>} />
             </Route>
           </Route>
           <Route path="/signin" element={<Signin />} />
