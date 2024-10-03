@@ -6,18 +6,27 @@ import cookieParser from "cookie-parser";
 
 import authRoute from './Routes/auth.routes.js';
 import userRoute from './Routes/user.routes.js';
-import listingRoute from './Routes/listing.routes.js'
+import listingRoute from './Routes/listing.routes.js';
+import path from path;
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser())
-app.use(cors())
+app.use(cors());
+
+const _dirname = path.resolve(); 
 
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
-app.use('/api/listing', listingRoute)
+app.use('/api/listing', listingRoute);
+
+
+app.use(express.static(path.join(_dirname, '/frontend/dist')));
+app.use("*", (req, res) => {
+    res.sendFile(path.join(_dirname, 'frontend', 'dist', 'index.html'))
+})
 
 app.use((err, req, res, next) => {
     console.log("err", err)
