@@ -9,6 +9,7 @@ const Search = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [listing, setListing] = useState([]);
+  const [showMore, setShowMore] = useState(false)
   const [sideBarData, setSideBarData] = useState({
     searchTerm: "",
     type: "all",
@@ -21,9 +22,16 @@ const Search = () => {
 
   const fetchListing = async (urlParams) => {
     setLoading(true);
+    setShowMore(false);
     const searchQuery = urlParams.toString();
     const res = await fetch(`/api/listing/get?${searchQuery}`);
     const data = await res.json();
+    console.log(data.length)
+    if(data.length > 8){
+      setShowMore(true)
+    }else {
+      setShowMore(false);
+    }
     setLoading(false);
     setListing(data);
   };
@@ -63,13 +71,15 @@ const Search = () => {
     fetchListing(urlParams);
   }, [location.search, searchTerm]);
 
+ 
+
   const handleChange = (e) => {
     const { id, checked, value } = e.target;
     if (id === "all" || id === "rent" || id === "sale") {
       setSideBarData({ ...sideBarData, type: id });
     }
 
-    if (id === "parking" || id === "furnished" || id === "offer") {
+    if (id === "parking" || id === "furnished" || id === "offer") { 
       setSideBarData({
         ...sideBarData,
         [id]: checked || checked === "true" ? true : false,
@@ -96,6 +106,20 @@ const Search = () => {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
+
+  const onShowMoreClick = async () => {
+    const numberOfListings = listing.length;
+    const startIndex = numberOfListings;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('startIndex', startIndex);
+    const searchQuery = urlParams.toString();
+    const res = await fetch(`/api/listing/get?${searchQuery}`);
+    const data = await res.json();
+    if(data.length < 9){
+      setShowMore(false)
+    }
+    setListing([...listing, ...data])
+  }
 
   return (
     <div className="md:flex">
@@ -187,7 +211,7 @@ const Search = () => {
           </button>
         </form>
       </div>
-      <div>
+      <div className="relative">
         <h2 className="text-3xl font-bold border-b-4 p-5 md:p-3 md:mt-5 mt-0 text-center md:text-start">
           Listing results:
         </h2>
@@ -204,6 +228,16 @@ const Search = () => {
                 )
               })
             }
+          <div className="w-full">
+          {
+            showMore && listing.length > 0 && (
+              <button
+              className="text-green-700 hover:underline p-7 ml-5"
+              onClick={onShowMoreClick}
+              >Show more</button>
+            )
+          }
+          </div>
           </div>
         ) : (
           <div className="flex justify-center items-center m-10">
