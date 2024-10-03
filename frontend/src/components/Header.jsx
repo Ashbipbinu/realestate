@@ -1,28 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useSelector} from'react-redux'
+import { useDispatch, useSelector} from'react-redux'
+import { getSearchTerm } from "../../redux/Slices/searchSlice";
 
 const Header = () => {
 
   const { currentUser } = useSelector(state => state.user);
+  const { search } = useSelector(state => state.searchTerm)
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  
   const handleSearch = (e) => {
-    e.preventDefault();
+    e && e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('searchTerm', searchTerm);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   }
 
+  
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermURL = urlParams.get('searchTerm');
     if(searchTermURL){
-      setSearchTerm(searchTermURL);
+      const timeoutId = setTimeout(() => {
+        dispatch(getSearchTerm(searchTerm));
+        const urlParams = new URLSearchParams(window.location.search);
+        // urlParams.set('searchTerm', searchTerm);
+        const searchQuery = urlParams.toString();
+        navigate(`/search?${searchQuery}`);
+      }, 1500); // 500ms delay
+  
+      return () => clearTimeout(timeoutId);
     }
-  }, [location.search])
+  }, [location.search, searchTerm])
 
   return (
     <>
@@ -38,8 +51,10 @@ const Header = () => {
           <input
             placeholder="Search..."
             className="outline-none bg-transparent p-2 lg:w-[500px] w-[250px]"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm || search}
+            onChange={(e) => {
+              setSearchTerm(e.target.value)
+            }}
           />
           <button>
           <FaSearch className="text-slate-600" />
