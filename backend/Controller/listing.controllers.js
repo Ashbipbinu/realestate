@@ -2,12 +2,10 @@ import Listing from "../Models/listing.model.js";
 import { errorHandler } from "../utils/error.handler.js";
 
 export const createListing = async (req, res, next) => {
-  console.log("enter");
   try {
     const list = await Listing.create(req.body);
     res.status(201).json(list);
   } catch (error) {
-    console.log("enter");
     next(error);
   }
 };
@@ -52,19 +50,12 @@ export const updateListing = async (req, res, next) => {
 };
 
 export const getListById = async (req, res, next) => {
-  console.log("hit");
   try {
     const list = await Listing.findById(req.params.id);
-    console.log("entered",list.userRef, req.user._id)
-    if (list.userRef !== req.user._id) {
-      next(
-        errorHandler(401, "List can be ediited only by the authorized users")
-      );
-    }
     if (!list) {
       next(errorHandler(404, "List with this Id is not found"));
     }
-    res.status(200).json(list);
+    res.status(200).json(list); 
   } catch (error) {
     next(error);
   }
