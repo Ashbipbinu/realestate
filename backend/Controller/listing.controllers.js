@@ -55,6 +55,7 @@ export const getListById = async (req, res, next) => {
   console.log("hit");
   try {
     const list = await Listing.findById(req.params.id);
+    console.log(list.userRef, req.user._id)
     if (list.userRef !== req.user._id) {
       next(
         errorHandler(401, "List can be ediited only by the authorized users")
