@@ -16,7 +16,7 @@ const Home = () => {
 
   const fetchSaleListing = async () => {
     try {
-      const res = await fetch(`api/listing/get?sale=true&limit=4`);
+      const res = await fetch(`api/listing/get?type=sale&limit=4`);
       const data = await res.json();
       setSaleListings(data);
     } catch (error) {
@@ -26,7 +26,7 @@ const Home = () => {
 
   const fetchRentListing = async () => {
     try {
-      const res = await fetch(`api/listing/get?rent=true&limit=4`);
+      const res = await fetch(`api/listing/get?type=rent&limit=4`);
       const data = await res.json();
       setRentListings(data);
       fetchSaleListing();

@@ -18,6 +18,7 @@ const Signin = () => {
   const handleChange = (event) =>{
     event.preventDefault();
     const { name, value } = event.target;
+    
     setFormData(prevEl => {
       return {
         ...prevEl,
@@ -28,8 +29,19 @@ const Signin = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if(!formData.email || !formData.password) {
+        dispatch(signInFailure("Enter all fields"))
+        return
+    }
      try {
       dispatch(signInStart())
+      if(formData.email){
+        const regEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if(!regEx.test(formData.email)){
+          dispatch(signInFailure("Invalid email or password"))
+          return
+        }
+      }
       const res = await fetch("/api/auth/signin", 
         {
         method: "POST",
